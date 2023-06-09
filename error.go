@@ -25,15 +25,24 @@ func (err *Error) String() string {
 
 func New(args ...any) error {
 	msg := fmt.Sprintln(args...)
-	name, file, line := getCallerInfo()
+	name, file, line := getCallerInfo(0)
 
 	return &Error{msg: msg[:len(msg)-1], file: file, line: line, fn: name}
 }
 
-func getCallerInfo() (string, string, int) {
+
+func NewCustom(skip int, args ...any) error {
+	msg := fmt.Sprintln(args...)
+	name, file, line := getCallerInfo(skip)
+
+	return &Error{msg: msg[:len(msg)-1], file: file, line: line, fn: name}
+}
+
+
+func getCallerInfo(skit int) (string, string, int) {
 	const caller = 2
 
-	pc, file, line, ok := runtime.Caller(caller)
+	pc, file, line, ok := runtime.Caller(caller + skip)
 	details := runtime.FuncForPC(pc)
 	if !ok || details == nil {
 		return "", "", 0
