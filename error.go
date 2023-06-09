@@ -39,7 +39,7 @@ func NewCustom(skip int, args ...any) error {
 }
 
 
-func getCallerInfo(skit int) (string, string, int) {
+func getCallerInfo(skip int) (string, string, int) {
 	const caller = 2
 
 	pc, file, line, ok := runtime.Caller(caller + skip)
